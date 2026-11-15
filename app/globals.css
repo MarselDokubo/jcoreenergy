@@ -46,3 +46,12 @@ body{font-size:16px}
 .jcore-hero-copy h1{font-size:clamp(38px,3.2vw,54px);max-width:none;white-space:nowrap;letter-spacing:-.065em}
 .jcore-hero-copy h1 span{white-space:nowrap}
 }
+
+/* Clinova-inspired open service cards */
+.service-card{border:0;background:transparent;overflow:visible}
+.service-card-image{border-radius:4px;overflow:hidden}
+.service-card-body{padding:17px 0 0}
+.service-card-body h3{align-items:flex-start;margin-bottom:8px}
+.service-card-body h3 svg{flex-shrink:0;border:1px solid var(--line);border-radius:50%;width:34px;height:34px;padding:9px;transition:background .2s,border-color .2s}
+.service-card:hover .service-card-body h3 svg{background:#e4eee8;border-color:var(--green)}
+.service-card-body p{font-size:16px;line-height:1.6}
