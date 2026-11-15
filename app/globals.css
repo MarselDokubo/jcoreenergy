@@ -39,3 +39,10 @@ body{font-size:16px}
 .footer-bottom{line-height:1.6}
 @media(max-width:950px){.nav{gap:15px}.header-inner{gap:15px}.brand-sub{font-size:11px}}
 @media(max-width:700px){.nav{gap:18px}.quick-item{font-size:16px}}
+
+/* Keep the hero headline to two deliberate lines on desktop */
+@media(min-width:951px){
+.jcore-hero-copy{padding-right:24px}
+.jcore-hero-copy h1{font-size:clamp(38px,3.2vw,54px);max-width:none;white-space:nowrap;letter-spacing:-.065em}
+.jcore-hero-copy h1 span{white-space:nowrap}
+}
