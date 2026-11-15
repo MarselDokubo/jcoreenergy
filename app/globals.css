@@ -88,3 +88,5 @@ body{font-size:16px}
 .enquiry-dialog-actions{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
 @media(max-width:850px){.contact-editorial{grid-template-columns:1fr;gap:45px}.contact-directory{padding:0 0 35px;border-right:0;border-bottom:1px solid var(--line)}.contact-enquiry{padding:0}}
 @media(max-width:700px){.contact-intro{padding:50px 0}.contact-editorial{padding-top:45px}.enquiry-dialog-content{padding:24px}.enquiry-summary div{grid-template-columns:90px 1fr}}
+
+.contact-breadcrumb{display:flex;align-items:center;gap:12px;font-size:16px;color:var(--muted);margin-bottom:22px}.contact-breadcrumb a{color:var(--ink);text-decoration:none}.contact-breadcrumb a:hover{text-decoration:underline;text-underline-offset:4px}.contact-breadcrumb [aria-current='page']{color:var(--muted)}
