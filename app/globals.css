@@ -55,3 +55,36 @@ body{font-size:16px}
 .service-card-body h3 svg{flex-shrink:0;border:1px solid var(--line);border-radius:50%;width:34px;height:34px;padding:9px;transition:background .2s,border-color .2s}
 .service-card:hover .service-card-body h3 svg{background:#e4eee8;border-color:var(--green)}
 .service-card-body p{font-size:16px;line-height:1.6}
+
+/* Clinova-inspired contact page and enquiry modal */
+.contact-intro{background:#f1f5f0;border-bottom:1px solid var(--line);padding:70px 0 62px}
+.contact-intro h1{font-size:clamp(46px,4.4vw,68px);margin:24px 0 15px}
+.contact-intro p{max-width:670px;color:var(--muted);font-size:17px;margin:0}
+.contact-editorial{display:grid;grid-template-columns:46% 54%;padding-top:54px;padding-bottom:95px}
+.contact-directory{padding:0 55px 0 0;border-right:1px solid var(--line)}
+.contact-enquiry{padding:0 0 0 55px}
+.contact-directory h2,.contact-enquiry h2{font-size:clamp(28px,2.5vw,38px);margin:20px 0 15px}
+.contact-directory p,.contact-enquiry>p{font-size:16px;color:var(--muted)}
+.contact-directory-detail{border-top:1px solid var(--line);margin-top:45px;padding-top:26px}
+.contact-directory-detail h3{margin:18px 0 12px;font-size:24px}
+.contact-form{padding:20px 0 0;background:transparent;border:0}
+.contact-form .field{margin-bottom:20px}
+.contact-form .field label{font-size:16px;font-weight:600}
+.contact-form .field input,.contact-form .field select,.contact-form .field textarea{background:#f3f7f3;border:1px solid #d1ddd5;border-radius:0;font-size:16px;padding:14px 13px;min-height:49px}
+.contact-form .field textarea{min-height:140px}
+.contact-form .form-grid{gap:16px}
+.contact-form .form-note{font-size:16px;line-height:1.5}
+.enquiry-backdrop{position:fixed;inset:0;z-index:200;background:rgba(16,35,34,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:22px}
+.enquiry-dialog{width:min(100%,570px);max-height:90vh;overflow-y:auto;background:#f8faf7;box-shadow:0 20px 70px #0003}
+.enquiry-dialog-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:20px 26px}
+.enquiry-close{border:0;background:none;padding:6px;display:grid;place-items:center}
+.enquiry-dialog-content{padding:34px 32px}
+.enquiry-dialog-content h2{font-size:43px;margin:17px 0}
+.enquiry-dialog-content>p{font-size:16px;color:var(--muted)}
+.enquiry-summary{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:17px 0;margin:24px 0}
+.enquiry-summary div{display:grid;grid-template-columns:115px 1fr;gap:15px;padding:5px 0;font-size:16px}
+.enquiry-summary dt{color:var(--muted)}.enquiry-summary dd{margin:0;overflow-wrap:anywhere}
+.enquiry-message{white-space:pre-wrap;overflow-wrap:anywhere;padding:15px 0;color:var(--ink)!important}
+.enquiry-dialog-actions{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
+@media(max-width:850px){.contact-editorial{grid-template-columns:1fr;gap:45px}.contact-directory{padding:0 0 35px;border-right:0;border-bottom:1px solid var(--line)}.contact-enquiry{padding:0}}
+@media(max-width:700px){.contact-intro{padding:50px 0}.contact-editorial{padding-top:45px}.enquiry-dialog-content{padding:24px}.enquiry-summary div{grid-template-columns:90px 1fr}}
