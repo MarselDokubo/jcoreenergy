@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowUpRight, Menu, X, Zap } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 const nav = [{label:"Home",href:"/"},{label:"About",href:"/about"},{label:"Services",href:"/services"},{label:"Training",href:"/training"},{label:"Contact",href:"/contact"}];
-export function Brand(){return <Link href="/" className="brand" aria-label="JCORE home"><span className="brand-symbol"><Zap size={23} strokeWidth={2.5}/></span><span className="brand-name">JCORE</span><span className="brand-sub">TRANSFORMER &<br/>ENERGY SERVICES LIMITED</span></Link>}
+export function Brand(){return <Link href="/" className="brand" aria-label="JCORE home"><img src="/images/jcore-logo.webp" alt="JCore Transformers & Energy Services Limited" style={{width:76,height:66,objectFit:"contain"}}/><span className="brand-name">JCORE</span><span className="brand-sub">TRANSFORMERS &<br/>ENERGY SERVICES LIMITED</span></Link>}
 export function Header(){const [open,setOpen]=useState(false);return <header className="site-header"><div className="shell header-inner"><Brand/><nav className={open?"nav open":"nav"} aria-label="Main navigation">{nav.map(n=><Link onClick={()=>setOpen(false)} href={n.href} key={n.href}>{n.label}</Link>)}</nav><Link href="/contact" className="button dark header-cta">Make an enquiry <ArrowUpRight size={16}/></Link><button className="mobile-menu" onClick={()=>setOpen(!open)} aria-label={open?"Close menu":"Open menu"} aria-expanded={open}>{open?<X/>:<Menu/>}</button></div></header>}
 export function Footer(){return <footer className="footer"><div className="shell footer-top"><div><Brand/><p>Transformer solutions and practical technical training.</p></div><div className="footer-links">{nav.map(n=><Link href={n.href} key={n.href}>{n.label}</Link>)}</div></div><div className="shell footer-bottom"><span>© {new Date().getFullYear()} JCORE Transformer and Energy Services Limited.</span><span>Engineering • Service • Training</span></div></footer>}
 export function SectionLabel({children}:{children:React.ReactNode}){return <div className="eyebrow"><span className="eyebrow-line"/>{children}</div>}
