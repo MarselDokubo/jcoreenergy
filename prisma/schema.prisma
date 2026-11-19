@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum StaffRole {
+  admin
+  manager
+  agent
+}
+
+enum EnquiryStatus {
+  new
+  in_progress
+  waiting
+  resolved
+  closed
+}
+
+enum EnquiryCategory {
+  service
+  inspection
+  individual_training @map("individual-training")
+  corporate_training  @map("corporate-training")
+  general
+}
+
+model StaffProfile {
+  id         String   @id @db.Uuid
+  fullName   String   @map("full_name")
+  role       StaffRole @default(agent)
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  assigned   Enquiry[] @relation("AssignedEnquiries")
+  notes      EnquiryNote[]
+  auditEvents AuditEvent[]
+  @@map("staff_profiles")
+}
+
+model Customer {
+  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fullName     String @map("full_name")
+  email        String
+  phone        String?
+  organisation String?
+  location     String?
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  enquiries    Enquiry[]
+  @@map("customers")
+}
+
+model Enquiry {
+  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customerId   String? @map("customer_id") @db.Uuid
+  customer     Customer? @relation(fields:[customerId],references:[id],onDelete:SetNull)
+  name         String
+  email        String
+  organisation String?
+  phone        String?
+  location     String?
+  category     EnquiryCategory
+  interest     String?
+  message      String
+  status       EnquiryStatus @default(new)
+  assignedTo   String? @map("assigned_to") @db.Uuid
+  assignee     StaffProfile? @relation("AssignedEnquiries",fields:[assignedTo],references:[id],onDelete:SetNull)
+  source       String @default("website")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  notes        EnquiryNote[]
+  @@index([status,createdAt],map:"enquiries_status_created_idx")
+  @@map("enquiries")
+}
+
+model EnquiryNote {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  enquiryId String @map("enquiry_id") @db.Uuid
+  enquiry   Enquiry @relation(fields:[enquiryId],references:[id],onDelete:Cascade)
+  authorId  String @map("author_id") @db.Uuid
+  author    StaffProfile @relation(fields:[authorId],references:[id])
+  body      String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  @@map("enquiry_notes")
+}
+
+model AuditEvent {
+  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actorId    String? @map("actor_id") @db.Uuid
+  actor      StaffProfile? @relation(fields:[actorId],references:[id],onDelete:SetNull)
+  action     String
+  entityType String @map("entity_type")
+  entityId   String? @map("entity_id") @db.Uuid
+  details    Json @default("{}")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  @@map("audit_events")
+}
