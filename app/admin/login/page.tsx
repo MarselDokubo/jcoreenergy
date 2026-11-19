@@ -1,4 +1,5 @@
 import { signIn } from "@/app/admin/actions";
+import PasswordField from "./password-field";
 export const metadata = { title: "Staff sign in" };
 export default async function Login({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
@@ -7,7 +8,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
     <h1>Welcome back.</h1><p>Sign in with your authorised staff account.</p>
     {error && <p role="alert" className="admin-error">Unable to sign in. Check your credentials.</p>}
     <form action={signIn}><label>Email<input name="email" type="email" required autoComplete="email" /></label>
-    <label>Password<input name="password" type="password" required autoComplete="current-password" /></label>
+    <PasswordField />
     <button type="submit">Sign in</button></form>
   </div></section>;
 }
