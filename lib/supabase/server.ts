@@ -10,7 +10,7 @@ export async function createSupabaseServerClient() {
   return createServerClient(url, key, {
     cookies: {
       getAll() { return cookieStore.getAll(); },
-      setAll(values) {
+      setAll(values: { name: string; value: string; options?: import("@supabase/ssr").CookieOptions }[]) {
         try { values.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); }
         catch { /* Server Components cannot set cookies; actions handle session updates. */ }
       }
