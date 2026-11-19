@@ -1,6 +1,6 @@
 /**
  * JCORE V2 one-time first-admin provisioning.
- * Run only from a trusted local shell against a NEW, EMPTY Supabase project.
+ * Run only from a trusted local shell against the verified, reset JCORE Supabase project.
  * Never import this script into the Next.js application.
  */
 import { createClient } from "@supabase/supabase-js";
@@ -27,7 +27,7 @@ if (process.env.JCORE_BOOTSTRAP_CONFIRM !== "YES") {
 }
 const url = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL);
 if (url.protocol !== "https:" || url.hostname !== `${process.env.JCORE_EXPECTED_PROJECT_REF}.supabase.co`) {
-  console.error("Supabase project URL does not match the expected NEW project reference.");
+  console.error("Supabase project URL does not match the expected JCORE project reference.");
   process.exit(1);
 }
 const email = process.env.JCORE_INITIAL_ADMIN_EMAIL.trim().toLowerCase();
