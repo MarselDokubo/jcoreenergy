@@ -1,0 +1,47 @@
+name: JCORE Production Prisma Migration
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type DEPLOY-JCORE-PRODUCTION to authorize database schema changes'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: jcore-production-db-migration
+  cancel-in-progress: false
+jobs:
+  migrate:
+    if: ${{ inputs.confirmation == 'DEPLOY-JCORE-PRODUCTION' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout approved branch
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Prisma CLI
+        run: npm install --no-save --no-package-lock --ignore-scripts prisma@6.19.0
+      - name: Validate Prisma schema
+        env:
+          DATABASE_URL: ${{ secrets.DIRECT_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx prisma validate
+      - name: Check migration status
+        env:
+          DATABASE_URL: ${{ secrets.DIRECT_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx prisma migrate status
+      - name: Apply reviewed migration
+        env:
+          DATABASE_URL: ${{ secrets.DIRECT_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx prisma migrate deploy
+      - name: Verify migration status
+        env:
+          DATABASE_URL: ${{ secrets.DIRECT_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx prisma migrate status
