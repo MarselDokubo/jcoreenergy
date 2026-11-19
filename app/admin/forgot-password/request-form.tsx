@@ -11,7 +11,7 @@ function recoveryError(error: AuthError): string {
  return "Recovery email could not be sent. Please contact the site administrator if this continues.";
 }
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/ssr";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 export function ForgotPasswordForm() {
  const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ export function ForgotPasswordForm() {
  const [error, setError] = useState("");
  async function submit(e: React.FormEvent<HTMLFormElement>) {
    e.preventDefault(); setBusy(true); setError("");
-   const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!);
+   const supabase = getSupabaseBrowserClient();
    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
      redirectTo: window.location.origin + "/admin/reset-password"
    });
