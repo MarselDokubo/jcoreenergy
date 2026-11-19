@@ -30,11 +30,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DIRECT_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: npx prisma validate
-      - name: Check migration status
-        env:
-          DATABASE_URL: ${{ secrets.DIRECT_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
-        run: npx prisma migrate status
       - name: Apply reviewed migration
         env:
           DATABASE_URL: ${{ secrets.DIRECT_URL }}
