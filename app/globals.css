@@ -98,3 +98,21 @@ body{font-size:16px}
 .admin-password-toggle:focus-visible{outline:2px solid #236653;outline-offset:1px}
 .admin-login-card a{color:#236653;text-decoration:underline;text-underline-offset:3px}
 .admin-login-card button:disabled{opacity:.6;cursor:wait}
+
+
+/* Staff portal forms: shared login and password recovery layout */
+.admin-login{min-height:calc(100vh - 420px);display:flex;align-items:center;justify-content:center;padding:64px 24px 72px;background:#f7faf7}
+.admin-login-card{width:min(100%,440px);padding:36px 32px 40px;border:1px solid #d9e5dc;background:#fff;color:#14292d}
+.admin-eyebrow{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;color:#236653;margin-bottom:20px}
+.admin-login-card h1{font-size:clamp(29px,3vw,38px);line-height:1.15;letter-spacing:-.04em;margin:0 0 16px}
+.admin-login-card p{font-size:15px;line-height:1.6;color:#64716c;margin:0 0 18px}
+.admin-login-card form{display:flex;flex-direction:column;gap:16px;margin:20px 0}
+.admin-login-card form label{display:block;font-size:13px;font-weight:600;color:#14292d}
+.admin-login-card form input{display:block;width:100%;min-height:44px;padding:10px 12px;margin-top:7px;border:1px solid #cbdad0;background:#fff;border-radius:0;color:#14292d;font:inherit;font-size:16px}
+.admin-login-card form input:focus-visible{outline:2px solid #236653;outline-offset:1px}
+.admin-login-card form>button[type="submit"]{display:block;width:100%;min-height:46px;padding:12px 18px;border:0;background:#236653;color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.admin-login-card .admin-error{color:#ad2929;font-size:14px;line-height:1.5}
+.admin-login-card .admin-password-wrap input{margin-top:7px}
+.admin-login-card .admin-password-toggle{width:40px;min-height:38px;background:transparent;color:#516c61}
+.admin-login-card .admin-password-toggle:hover{background:#eef5f0}
+@media(max-width:600px){.admin-login{padding:38px 16px 55px}.admin-login-card{padding:30px 22px}}

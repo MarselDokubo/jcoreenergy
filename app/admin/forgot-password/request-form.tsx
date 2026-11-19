@@ -1,5 +1,15 @@
 "use client";
 import { useState } from "react";
+import type { AuthError } from "@supabase/supabase-js";
+
+function recoveryError(error: AuthError): string {
+ const code = error.code ?? "";
+ if (error.status === 429 || code.includes("rate_limit") || code.includes("over_email_send_rate_limit")) return "Too many recovery requests. Wait before trying again. You can also check whether an earlier email arrived.";
+ if (code === "email_address_invalid") return "Check the email address and try again.";
+ if (error.status === 422) return "Supabase rejected this recovery request. Check the configured redirect URL and authentication settings.";
+ if (error.status === 0 || error.message.toLowerCase().includes("fetch")) return "The recovery service could not be reached. Check your connection and try again.";
+ return "Recovery email could not be sent. Please contact the site administrator if this continues.";
+}
 import Link from "next/link";
 import { createBrowserClient } from "@supabase/ssr";
 
@@ -15,7 +25,7 @@ export function ForgotPasswordForm() {
      redirectTo: window.location.origin + "/admin/reset-password"
    });
    setBusy(false);
-   if (error) { setError("Unable to send recovery email right now. Please try again later."); return; }
+   if (error) { console.error("JCORE password recovery failed", { code: error.code, status: error.status }); setError(recoveryError(error)); return; }
    setSent(true);
  }
  return <div>
