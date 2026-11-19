@@ -5,6 +5,6 @@ export default function Login() {
     <span className="admin-eyebrow">JCORE / STAFF PORTAL</span>
     <h1>Welcome back.</h1>
     <p>Sign in with your authorised JCORE staff account.</p>
-    <SignIn routing="path" path="/admin/login" forceRedirectUrl="/admin" signUpUrl={undefined} />
+    <SignIn routing="hash" path="/admin/login" forceRedirectUrl="/admin" signUpUrl={undefined} />
   </div></section>;
 }
