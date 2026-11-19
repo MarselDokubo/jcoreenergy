@@ -1,9 +1,10 @@
 import {NextRequest,NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
-import {Prisma} from "@prisma/client";
+import {Prisma,EnquiryCategory} from "@prisma/client";
 export const runtime="nodejs";
 const categories=["service","inspection","individual-training","corporate-training","general"] as const;
 type Category=typeof categories[number];
+const categoryMap:Record<Category,EnquiryCategory>={service:"service",inspection:"inspection","individual-training":"individual_training","corporate-training":"corporate_training",general:"general"};
 const isText=(v:unknown,max:number)=>typeof v==="string"&&v.trim().length<=max;
 export async function POST(request:NextRequest){
   const origin=request.headers.get("origin");
@@ -17,7 +18,7 @@ export async function POST(request:NextRequest){
   if(keys.some(k=>!isText(data[k],k==="message"?5000:200))||
     typeof data.category!=="string"||!categories.includes(data.category as Category)||
     !(data.name as string).trim()||!(data.message as string).trim()||
-    !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(data.email))||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(data.email))||
     String(data.email).length>254)
     return NextResponse.json({error:"Please check the required fields and try again."},{status:400});
   const clean=(k:typeof keys[number])=>(data[k] as string).trim();
@@ -25,7 +26,7 @@ export async function POST(request:NextRequest){
     const enquiry=await prisma.enquiry.create({data:{
       name:clean("name"),email:clean("email").toLowerCase(),organisation:clean("organisation")||null,
       phone:clean("phone")||null,location:clean("location")||null,
-      category:data.category as Category,interest:clean("interest")||null,
+      category:categoryMap[data.category as Category],interest:clean("interest")||null,
       message:clean("message"),source:"website"
     },select:{id:true}});
     return NextResponse.json({ok:true,id:enquiry.id},{status:201});
