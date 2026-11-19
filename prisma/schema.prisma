@@ -32,6 +32,7 @@ enum EnquiryCategory {
 
 model StaffProfile {
   id         String   @id @db.Uuid
+  clerkUserId String?  @unique @map("clerk_user_id")
   fullName   String   @map("full_name")
   role       StaffRole @default(agent)
   active     Boolean  @default(true)
