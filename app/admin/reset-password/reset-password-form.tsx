@@ -2,11 +2,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { createBrowserClient } from "@supabase/ssr";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
-const supabase = createBrowserClient(url, key);
+const supabase = getSupabaseBrowserClient();
 
 export function ResetPasswordForm() {
   const [ready, setReady] = useState(false);
