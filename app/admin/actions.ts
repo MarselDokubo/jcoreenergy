@@ -44,3 +44,36 @@ export async function addEnquiryNote(formData: FormData) {
   });
   revalidatePath("/admin/enquiries");
 }
+
+const uuid=/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i;
+export async function convertEnquiryToCustomer(formData:FormData){
+ const staff=await requireStaff();
+ const id=String(formData.get("id")??"");
+ if(!uuid.test(id))return;
+ await prisma.$transaction(async tx=>{
+  const enquiry=await tx.enquiry.findUnique({where:{id}});
+  if(!enquiry||enquiry.customerId)return;
+  const existing=await tx.customer.findFirst({where:{email:{equals:enquiry.email,mode:"insensitive"}},orderBy:{createdAt:"asc"}});
+  const customer=existing??await tx.customer.create({data:{fullName:enquiry.name,email:enquiry.email,phone:enquiry.phone,organisation:enquiry.organisation,location:enquiry.location}});
+  await tx.enquiry.update({where:{id},data:{customerId:customer.id}});
+  await tx.auditEvent.create({data:{actorId:staff.id,action:"enquiry.converted_to_customer",entityType:"enquiry",entityId:id,details:{customerId:customer.id}}});
+ });
+ revalidatePath("/admin");revalidatePath("/admin/enquiries");revalidatePath("/admin/customers");
+}
+export async function assignEnquiry(formData:FormData){
+ const staff=await requireStaff();
+ const id=String(formData.get("id")??"");
+ const assignedTo=String(formData.get("assignedTo")??"");
+ if(!uuid.test(id)||(assignedTo!==""&&!uuid.test(assignedTo)))return;
+ await prisma.$transaction(async tx=>{
+  const enquiry=await tx.enquiry.findUnique({where:{id},select:{assignedTo:true}});
+  if(!enquiry)return;
+  if(assignedTo){
+   const assignee=await tx.staffProfile.findFirst({where:{id:assignedTo,active:true},select:{id:true}});
+   if(!assignee)return;
+  }
+  await tx.enquiry.update({where:{id},data:{assignedTo:assignedTo||null}});
+  await tx.auditEvent.create({data:{actorId:staff.id,action:"enquiry.assigned",entityType:"enquiry",entityId:id,details:{from:enquiry.assignedTo,to:assignedTo||null}}});
+ });
+ revalidatePath("/admin/enquiries");revalidatePath("/admin");
+}
