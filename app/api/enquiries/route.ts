@@ -1,6 +1,7 @@
 import {NextRequest,NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {Prisma,EnquiryCategory} from "@prisma/client";
+import {notifyNewEnquiry} from "@/lib/enquiry-notifications";
 export const runtime="nodejs";
 const categories=["service","inspection","individual-training","corporate-training","general"] as const;
 type Category=typeof categories[number];
@@ -29,6 +30,7 @@ export async function POST(request:NextRequest){
       category:categoryMap[data.category as Category],interest:clean("interest")||null,
       message:clean("message"),source:"website"
     },select:{id:true}});
+    await notifyNewEnquiry({id:enquiry.id,name:clean("name"),email:clean("email"),category:String(data.category),message:clean("message")});
     return NextResponse.json({ok:true,id:enquiry.id},{status:201});
   }catch(error){
     console.error("Public enquiry submission failed",error instanceof Prisma.PrismaClientKnownRequestError?error.code:"database error");
