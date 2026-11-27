@@ -2,21 +2,16 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireStaff } from "@/lib/admin-auth";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 
-export async function signIn(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim();
-  const password = String(formData.get("password") ?? "");
-  if (!email || !password) redirect("/admin/login?error=invalid");
-  const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) redirect("/admin/login?error=invalid");
-  redirect("/admin");
-}
 export async function signOut() {
-  const supabase = await createSupabaseServerClient();
-  await supabase.auth.signOut();
+  const { sessionId } = await auth();
+  if (sessionId) {
+    const clerk = await clerkClient();
+    await clerk.sessions.revokeSession(sessionId);
+  }
   redirect("/admin/login");
 }
 export async function updateEnquiryStatus(formData: FormData) {
