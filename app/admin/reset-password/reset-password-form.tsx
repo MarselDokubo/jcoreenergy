@@ -2,11 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { createBrowserClient } from "@supabase/ssr";
-
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
-const supabase = createBrowserClient(url, key);
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 export function ResetPasswordForm() {
   const [ready, setReady] = useState(false);
@@ -18,6 +14,7 @@ export function ResetPasswordForm() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
     let mounted = true;
     const params = new URLSearchParams(window.location.hash.slice(1));
     const error = params.get("error_description");
@@ -44,6 +41,7 @@ export function ResetPasswordForm() {
     if (password.length < 12) { setMessage("Use at least 12 characters."); return; }
     if (password !== confirm) { setMessage("Passwords do not match."); return; }
     setBusy(true); setMessage("");
+    const supabase = getSupabaseBrowserClient();
     const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
     if (error) { setMessage(error.message); return; }
